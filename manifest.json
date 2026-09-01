@@ -1,9 +1,3 @@
-{
-  "name": "NSV Dashboard",
-  "description": "Dashboard för produktion och planering i Trimble Connect",
-  "version": "1.0.0",
   "url": "https://vfalk-ncc.github.io/NSV-dashboard",
   "icon": "https://www.vhv.rs/dpng/d/363-3638241_trimble-logo-hd-png-download.png",
-  "enabled": true,
-  "extensionType": ["project"]
 }
