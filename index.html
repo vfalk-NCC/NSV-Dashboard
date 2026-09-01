@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSV Trimble Connect Dashboard</title>
+<style>
+body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;padding:20px}
+.card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+h1{color:#005a9c}
+.value{font-weight:bold;color:#0078d4}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>NSV Dashboard</h1>
+<p>Detta är en startmall för ett Trimble Connect-tillägg.</p>
+<p><b>Projekt:</b> <span class="value" id="projectName">Laddar...</span></p>
+<p><b>Projekt-ID:</b> <span class="value" id="projectId">Laddar...</span></p>
+<p><b>Användare:</b> <span class="value" id="userName">Laddar...</span></p>
+</div>
+<script>
+document.getElementById('projectName').textContent='Trimble Connect Projekt';
+document.getElementById('projectId').textContent='PROJECT_ID';
+document.getElementById('userName').textContent='Inloggad användare';
+</script>
+</body>
+</html>
