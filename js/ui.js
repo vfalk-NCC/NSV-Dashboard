@@ -93,7 +93,8 @@ const P = {
   kanban: 'M4 3h4v14H4zM10 3h4v9h-4zM16 3h4v18h-4z',
   zoomIn: 'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3M11 8v6M8 11h6',
   zoomOut: 'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3M8 11h6',
-  play: 'M6 3l14 9-14 9z'
+  play: 'M6 3l14 9-14 9z',
+  cloud: 'M17.5 19H7a5 5 0 1 1 1.6-9.7A6 6 0 0 1 20 11.5a3.8 3.8 0 0 1-2.5 7.5z'
 };
 export function icon(name, size = 16, cls = '') {
   const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

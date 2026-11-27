@@ -31,7 +31,9 @@ const DEFAULTS = {
   toolsDir: 'user_tools',
   maxUploadMB: 200,
   // Framtida PROJECT CONTROL HUB API för egna verktyg. Endast läsning, av som standard.
-  toolApi: { enabled: false }
+  toolApi: { enabled: false },
+  // Skript som "Hämta uppdateringar" får köra, t.ex. NSV Binder. Definieras bara här, aldrig från webbläsaren.
+  scripts: {}
 };
 
 function loadConfig() {
@@ -41,7 +43,7 @@ function loadConfig() {
     try { user = JSON.parse(fs.readFileSync(p, 'utf8')); }
     catch (e) { console.error('config.json kunde inte läsas:', e.message); }
   }
-  return { ...DEFAULTS, ...user, toolApi: { ...DEFAULTS.toolApi, ...(user.toolApi || {}) } };
+  return { ...DEFAULTS, ...user, toolApi: { ...DEFAULTS.toolApi, ...(user.toolApi || {}) }, scripts: { ...(user.scripts || {}) } };
 }
 
 const config = loadConfig();
@@ -51,6 +53,7 @@ const ATT_DIR = path.join(DATA_DIR, 'attachments');
 const TOOLS_DIR = path.resolve(ROOT, config.toolsDir);
 const EXAMPLES_DIR = path.join(ROOT, 'examples', 'tools');
 const MAX_BODY = config.maxUploadMB * 1024 * 1024;
+const sources = require('./sources.js')({ dataDir: DATA_DIR, config });
 
 const HUB_ORIGINS = new Set([`http://127.0.0.1:${config.hubPort}`, `http://localhost:${config.hubPort}`]);
 const HUB_HOSTS = new Set([`127.0.0.1:${config.hubPort}`, `localhost:${config.hubPort}`]);
@@ -286,6 +289,19 @@ async function handleHub(req, res) {
       }
     }
 
+    // -------------------------------------------- datakällor / hämta uppdateringar
+    if (p === '/api/sources') {
+      if (method === 'GET') return send(res, 200, await sources.list());
+      if (method === 'PUT') return send(res, 200, { sources: await sources.save((await readJson(req)).sources) });
+    }
+    if (p === '/api/sources/test' && method === 'POST') return send(res, 200, await sources.test((await readJson(req)).source));
+    if (p === '/api/sync' && method === 'POST') { const b = await readJson(req); return send(res, 200, await sources.sync(b.ids)); }
+    if (p === '/api/source-file' && method === 'GET') {
+      const file = await sources.resolveFile(url.searchParams.get('s'), url.searchParams.get('p') || '');
+      if (!file) return send(res, 404, 'Hittades inte');
+      return serveFile(res, file, { 'Content-Security-Policy': "sandbox; default-src 'none'; img-src 'self'; style-src 'unsafe-inline'" });
+    }
+
     if (p.startsWith('/api/')) return send(res, 404, { error: 'Okänt API' });
 
     // -------------------------------------------- filer
@@ -410,6 +426,7 @@ async function main() {
   console.log(`  Databas:    ${DB_FILE}`);
   console.log(`  Verktygsmapp: ${TOOLS_DIR}`);
   console.log(`  Tool API:   ${config.toolApi.enabled ? 'PÅ (endast läsning)' : 'av'}`);
+  console.log(`  Skript:     ${Object.keys(config.scripts).length ? Object.keys(config.scripts).join(', ') : 'inga (se config.example.json)'}`);
   console.log('');
   console.log('  Stäng fönstret eller tryck Ctrl+C för att avsluta.');
 

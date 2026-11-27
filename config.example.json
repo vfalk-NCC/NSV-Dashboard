@@ -3,5 +3,14 @@
   "hubPort": 4800,
   "toolPort": 4801,
   "maxUploadMB": 200,
-  "toolApi": { "enabled": false }
+  "toolApi": { "enabled": false },
+
+  "scripts": {
+    "nsv-binder": {
+      "label": "NSV Binder – hämta PDF:er",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\NSV\\Binder\\hamta-pdf.ps1\"",
+      "cwd": "C:\\NSV\\Binder",
+      "timeoutSec": 900
+    }
+  }
 }

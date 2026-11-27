@@ -319,6 +319,7 @@ function migrate(db) {
   if (!db.whiteboard) db.whiteboard = { cards: [], view: { x: 0, y: 0, z: 1 } };
   if (!db.whiteboard.view) db.whiteboard.view = { x: 0, y: 0, z: 1 };
   if (!db.project) db.project = { name: 'Projekt' };
+  if (!db.sync) db.sync = { interval: 15, lastSync: null, state: {} };
   return db;
 }
 
@@ -410,6 +411,7 @@ const urlCache = new Map();
 export async function fileUrl(f) {
   if (!f) return null;
   if (f.store === 'server') return f.url;
+  if (f.store === 'source') return `api/source-file?s=${encodeURIComponent(f.sourceId)}&p=${encodeURIComponent(f.path)}`;
   if (f.store === 'idb') {
     if (urlCache.has(f.key)) return urlCache.get(f.key);
     const blob = await idbGet(f.key);

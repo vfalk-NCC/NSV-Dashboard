@@ -13,6 +13,7 @@ import * as actionsView from './views/actions.js';
 import * as library from './views/library.js';
 import * as whiteboard from './views/whiteboard.js';
 import * as tools from './views/tools.js';
+import { syncButton, initSync, runSync, manageSources } from './sync.js';
 
 const VIEWS = { overview, schedule, packages, issues, actions: actionsView, library, whiteboard, tools };
 const NAV = [
@@ -46,6 +47,7 @@ function buildShell() {
     shell.crumbs,
     h('span', { class: 'grow' }),
     h('button', { class: 'searchbtn', onclick: () => openPalette(), title: 'Sök och kommandon (Ctrl+K)' }, icon('search', 15), h('span', 'Sök eller kör kommando…'), kbd('Ctrl', 'K')),
+    syncButton(),
     h('button', { class: 'btn sm primary create-btn', title: 'Skapa ny', onclick: (e) => createMenu(e.currentTarget) }, icon('plus', 14), 'Ny'),
     shell.save,
     h('button', { class: 'iconbtn', title: 'Tema', onclick: () => app.toggleTheme() }, icon(layout.theme === 'dark' ? 'sun' : 'moon', 17)),
@@ -370,6 +372,7 @@ function onKey(e) {
     case 'g': case 'G': gPending = Date.now(); break;
     case '/': e.preventDefault(); openPalette(); break;
     case '?': app.shortcuts(); break;
+    case 'u': case 'U': e.preventDefault(); runSync(); break;
     case '[': app.toggleNav(); break;
     case ']': app.toggleCtx(); break;
     case 'n': case 'N': e.preventDefault(); createAction(selDefaults()); break;
@@ -406,7 +409,7 @@ app.shortcuts = () => {
   modal({
     title: 'Kortkommandon', width: 720, cls: 'modal-shortcuts',
     body: h('div', { class: 'sc-grid' },
-      g('Allmänt', [[['Ctrl', 'K'], 'Sök och kommandon'], [['/'], 'Sök'], [['?'], 'Den här listan'], [['Esc'], 'Stäng / avmarkera'], [['Ctrl', 'Z'], 'Ångra senaste'], [['['], 'Navigering'], [[']'], 'Kontextpanel'], [['Alt', '←'], 'Tillbaka']]),
+      g('Allmänt', [[['Ctrl', 'K'], 'Sök och kommandon'], [['/'], 'Sök'], [['?'], 'Den här listan'], [['Esc'], 'Stäng / avmarkera'], [['Ctrl', 'Z'], 'Ångra senaste'], [['U'], 'Hämta uppdateringar'], [['['], 'Navigering'], [[']'], 'Kontextpanel'], [['Alt', '←'], 'Tillbaka']]),
       g('Gå till', [[['G', 'O'], 'Översikt'], [['G', 'S'], 'Tidplan'], [['G', 'P'], 'Arbetspaket'], [['G', 'I'], 'Ärenden'], [['G', 'A'], 'Åtgärder'], [['G', 'R'], 'Ritningar & modeller'], [['G', 'W'], 'Whiteboard'], [['G', 'T'], 'My Tools']]),
       g('Markerat objekt', [[['J'], 'Nästa i listan'], [['K'], 'Föregående'], [['↵'], 'Öppna'], [['E'], 'Redigera'], [['S'], 'Favorit'], [['W'], 'Till whiteboard'], [['Del'], 'Ta bort'], [['⇧', 'Klick'], 'Flytande fönster']]),
       g('Skapa & vyer', [[['N'], 'Ny åtgärd'], [['I'], 'Nytt ärende'], [['1–9'], 'Flikar i arbetspaket'], [['←', '→'], 'Tidplan: bläddra'], [['T'], 'Tidplan: idag'], [['F'], 'Whiteboard: anpassa'], [['R'], 'Verktyg: ladda om'], [['I'], 'Verktyg: info']]))
@@ -433,6 +436,8 @@ app.settings = () => {
         h('p', { class: 'muted small' }, store.mode === 'server'
           ? `Data sparas i ${s.paths.data}/db.json. Verktyg ligger i ${s.paths.tools}/ och körs från ${s.toolOrigin}. Tool API: ${s.toolApi ? 'på (läsning)' : 'av'}.`
           : 'Data sparas bara i den här webbläsaren. Starta start.bat för riktig databas, bilagor på disk och verktyg i mappar.'))),
+      h('div', { class: 'set-row' }, h('div', h('b', 'Datakällor'), h('small', 'SharePoint (synkad mapp), mappar, Powerproject-tidplan och skript som NSV Binder.')),
+        h('button', { class: 'btn sm', onclick: () => { m.close(); manageSources(); } }, icon('server', 13), 'Hantera…')),
       h('div', { class: 'set-row' }, h('div', h('b', 'Tema'), h('small', 'Mörkt passar kontrollrumskänslan, ljust för utskrift och dagsljus.')),
         h('div', { class: 'seg' }, ['dark', 'light'].map((t) => h('button', { class: layout.theme === t ? 'on' : '', onclick: (e) => { if (layout.theme !== t) app.toggleTheme(); e.currentTarget.parentNode.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b === e.currentTarget)); } }, t === 'dark' ? 'Mörkt' : 'Ljust')))),
       h('div', { class: 'set-row' }, h('div', h('b', 'Arbetsyta'), h('small', 'Panelbredder, flytande fönster och fästning sparas lokalt.')),
@@ -467,6 +472,7 @@ async function start() {
   // stäng popovers vid scroll i huvudytan
   shell.view.addEventListener('scroll', () => { if ($('.popover.open:not(.pop-menu)')) {} }, { passive: true });
   onRoute();
+  initSync();
   renderCtx();
   renderFloats();
   if (fresh) setTimeout(() => toast(store.mode === 'server' ? 'Välkommen! Exempeldata för NSV är inläst. Ctrl+K för att söka.' : 'Demoläge: data sparas i webbläsaren. Starta start.bat för full funktion.', { timeout: 7000, iconName: 'sparkle' }), 400);

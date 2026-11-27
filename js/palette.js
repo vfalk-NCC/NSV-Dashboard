@@ -43,6 +43,8 @@ function commands() {
     { id: 'p-2w', label: 'Period: nästa 2 veckor', kw: 'period next 2 weeks två veckor', icon: 'calendar', run: () => setFilter({ period: '2w' }) },
     { id: 'p-4w', label: 'Period: nästa 4 veckor', kw: 'period next 4 weeks fyra veckor', icon: 'calendar', run: () => setFilter({ period: '4w' }) },
     { id: 'p-overdue', label: 'Visa försenat och förfallet', kw: 'late overdue försenat förfallet', icon: 'clock', run: () => setFilter({ period: 'overdue' }) },
+    { id: 'sync', label: 'Hämta uppdateringar', kw: 'sync update hämta uppdateringar sharepoint binder powerproject refresh', icon: 'refresh', kbd: 'U', run: () => import('./sync.js').then((m) => m.runSync()) },
+    { id: 'sources', label: 'Datakällor (SharePoint, mappar, Powerproject, skript)…', kw: 'sources datakällor sharepoint powerproject binder skript mapp', icon: 'server', run: () => import('./sync.js').then((m) => m.manageSources()) },
     { id: 'shortcuts', label: 'Visa kortkommandon', kw: 'help shortcuts keyboard kortkommandon hjälp', icon: 'keyboard', kbd: '?', run: () => app.shortcuts() },
     { id: 'settings', label: 'Inställningar och data', kw: 'settings data export import backup inställningar', icon: 'server', run: () => app.settings() }
   ];

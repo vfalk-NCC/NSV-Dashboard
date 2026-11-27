@@ -41,6 +41,26 @@ data/                 db.json, säkerhetskopia, bilagor   (skapas, ignoreras av 
 user_tools/           dina registrerade verktyg           (skapas, ignoreras av git)
 ```
 
+## Hämta uppdateringar
+
+Knappen **Hämta uppdateringar** finns i toppraden i alla vyer (eller tryck `U`). Pilen bredvid öppnar **Datakällor**, där du kopplar:
+
+| Källa | Så kopplar du |
+|---|---|
+| **SharePoint** | Öppna biblioteket i SharePoint och välj *Synkronisera*. Då finns det som en mapp på datorn via OneDrive. Klistra in mappens sökväg (Shift + högerklick på mappen → *Kopiera som sökväg*). |
+| **Mapp på datorn** | Valfri mapp, t.ex. den där NSV Binder sparar PDF:er. |
+| **Powerproject** | Exportera tidplanen som *MS Project XML* (eller CSV) till en fast plats och ange filen. Den läses in när den har ändrats. |
+| **Skript (NSV Binder m.fl.)** | Skript läggs in i `config.json` (se `config.example.json`) och väljs sedan som källa. De körs före mapparna. |
+
+Det här läses in:
+- **PDF och DWG** med nummer och revision i filnamnet (t.ex. `F12-123_D_Grundplatta.pdf`) blir ritningar. En ny revision uppdaterar ritningen och sparar den gamla revisionen i historiken. Ritningen kopplas till arbetspaketet via koden (F12 …).
+- **IFC** blir nya modellversioner. Övriga filer blir dokument: foton, e-post och PDF:er.
+- **Tidplanen** uppdaterar start, slut och framdrift för aktiviteter med samma kod. Saknade aktiviteter kan skapas om du vill.
+
+Bara nya eller ändrade filer läses in. Filer som tas bort i mappen tas aldrig bort i appen. Allt som läses in kan ångras (`Ctrl Z`), och en rapport visar vad som hände.
+
+Källor markerade **Auto** hämtas när appen startar, när datorn får uppkoppling igen och med jämna mellanrum (var 15:e minut som standard). Utan uppkoppling läses mapparna ändå, men skripten hoppas över. Filerna öppnas direkt från sin plats; inget kopieras.
+
 ## My Tools
 
 - **Lägg till verktyg:** välj en HTML-fil, välj en mapp med `index.html`, eller släpp filer och mappar direkt på sidan.
