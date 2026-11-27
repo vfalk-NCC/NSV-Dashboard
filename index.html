@@ -17,7 +17,16 @@
   <div id="app"></div>
   <div id="layer"></div>
   <div id="toasts" aria-live="polite"></div>
-  <script type="module" src="js/main.js"></script>
+  <script>
+    // Öppnad direkt från disken (file://)? Då blockerar webbläsaren ES-moduler,
+    // så vi använder det färdigbyggda paketet (demoläge). Annars modulerna direkt.
+    (function () {
+      var s = document.createElement('script');
+      if (location.protocol === 'file:') s.src = 'js/app.bundle.js';
+      else { s.type = 'module'; s.src = 'js/main.js'; }
+      document.body.appendChild(s);
+    })();
+  </script>
   <noscript>Project Control Hub kräver JavaScript.</noscript>
 </body>
 </html>

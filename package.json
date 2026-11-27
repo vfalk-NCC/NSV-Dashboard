@@ -5,7 +5,8 @@
   "description": "Project Control Hub – NSV projektstyrning och personlig verktygslåda",
   "scripts": {
     "start": "node server/server.js --open",
-    "serve": "node server/server.js"
+    "serve": "node server/server.js",
+    "build": "node tools/build.js"
   },
   "engines": { "node": ">=18" }
 }
