@@ -1,0 +1,7 @@
+{
+  "host": "127.0.0.1",
+  "hubPort": 4800,
+  "toolPort": 4801,
+  "maxUploadMB": 200,
+  "toolApi": { "enabled": false }
+}

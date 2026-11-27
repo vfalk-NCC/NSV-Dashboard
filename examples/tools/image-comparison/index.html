@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bildjämförelse</title>
+<meta name="description" content="Jämför två platsbilder med reglage – före/efter.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Bildjämförelse</h1>
+    <label class="pick">Före <input type="file" accept="image/*" data-side="a"></label>
+    <label class="pick">Efter <input type="file" accept="image/*" data-side="b"></label>
+    <span class="hint">Dra bilder hit · ← → flyttar reglaget</span>
+  </header>
+  <main id="stage">
+    <img id="a" src="assets/before.svg" alt="Före">
+    <div id="clip"><img id="b" src="assets/after.svg" alt="Efter"></div>
+    <div id="handle" role="slider" tabindex="0" aria-label="Jämförelse" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span></span></div>
+    <div class="tag left">Före</div><div class="tag right">Efter</div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

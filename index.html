@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="sv" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Control Hub</title>
+<meta name="description" content="Project Control Hub – projektstyrning, kopplad information och personlig verktygslåda för NSV.">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/app.css">
+<script>
+  // Sätt tema innan första målning för att undvika blink
+  try { var l = JSON.parse(localStorage.getItem('pch.layout.v1') || '{}'); if (l.theme) document.documentElement.dataset.theme = l.theme; } catch (e) {}
+</script>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="layer"></div>
+  <div id="toasts" aria-live="polite"></div>
+  <script type="module" src="js/main.js"></script>
+  <noscript>Project Control Hub kräver JavaScript.</noscript>
+</body>
+</html>
