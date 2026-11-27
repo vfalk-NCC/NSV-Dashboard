@@ -16,6 +16,10 @@ npm start
 
 Det enda som krävs är [Node.js](https://nodejs.org) 18 eller senare. Inga paket installeras.
 
+### Utan internet
+
+Appen fungerar helt offline. Typsnitten (Inter och JetBrains Mono, SIL Open Font License) ligger i `assets/fonts/`, och inga filer hämtas från externa adresser. Det enda som kräver internet är att installera Node.js och hämta repot första gången. Därefter kan datorn vara helt frånkopplad.
+
 Utan server, till exempel på GitHub Pages, körs appen i **demoläge**. Då sparas datan bara i webbläsaren, och My Tools tar bara emot enskilda HTML-filer.
 
 ## Struktur
