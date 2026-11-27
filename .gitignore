@@ -4,3 +4,6 @@ user_tools/
 config.json
 node_modules/
 *.tmp
+
+# Portabel Node (laggs till lokalt)
+node/
